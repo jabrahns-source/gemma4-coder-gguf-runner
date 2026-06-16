@@ -1,0 +1,27 @@
+[Unit]
+Description=Gemma 4 12B Coder LLM Server
+After=network.target
+
+[Service]
+Type=simple
+User=%I
+WorkingDirectory=/opt/gemma4-coder
+Environment="MODELS_DIR=/opt/gemma4-coder/models"
+Environment="LLAMA_SERVER=/usr/local/bin/llama-server"
+Environment="HOST=0.0.0.0"
+Environment="PORT=18080"
+Environment="CTX_SIZE=16384"
+Environment="N_GPU_LAYERS=99"
+Environment="TEMP=1.0"
+Environment="TOP_P=0.95"
+Environment="TOP_K=64"
+Environment="CACHE_TYPE_K=q8_0"
+Environment="CACHE_TYPE_V=q8_0"
+ExecStart=/opt/gemma4-coder/scripts/start-server.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
