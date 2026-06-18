@@ -1,0 +1,30 @@
+name: CI Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y curl make
+
+    - name: Test scripts
+      run: |
+        chmod +x scripts/*.sh
+        make help
+
+    - name: Docker build test
+      run: docker build -f docker/Dockerfile -t gemma4-coder:test .
+
+    - name: Benchmark dry-run
+      run: echo "Benchmarks would run here in full env"
