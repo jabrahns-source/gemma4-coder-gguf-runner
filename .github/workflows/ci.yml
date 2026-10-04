@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Config smoke
+        run: python3 -m unittest tests/test_config.py -v
+      - name: No weights committed
+        run: |
+          if find . -name '*.gguf' -o -name '*.bin' | grep -q .; then
+            echo "model weights must not be committed"
+            exit 1
+          fi
